@@ -61,6 +61,23 @@ export default function Home() {
           <div className="mt-6 mx-auto max-w-5xl">
             {selectedWebcam && <WebcamCard key={`webcam-${selectedWebcamIndex}-${refreshKey}`} webcam={selectedWebcam} />}
           </div>
+          
+          {/* Föhn diagram */}
+          <div className="mt-2 mb-8 mx-auto max-w-4xl">
+            <div className="bg-slate-900/40 border border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl overflow-hidden">
+              <div className="p-4 border-b border-sky-700/30">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">Föhn Wind Diagram</h2>
+              </div>
+              <div className="flex justify-center bg-white p-2">
+                <img 
+                  src="https://profiwetter.ch/wind_foehn_ch_de.png?t=1699802646" 
+                  alt="Föhn Wind Diagram" 
+                  className="max-w-full h-auto"
+                  style={{ maxHeight: '400px' }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 
