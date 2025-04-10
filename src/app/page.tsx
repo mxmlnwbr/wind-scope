@@ -158,6 +158,7 @@ const webcams: Webcam[] = [
 function WebcamCard({ webcam }: { webcam: Webcam }) {
   const [currentView, setCurrentView] = React.useState<string>(webcam.image);
   const isSisikon = webcam.name.includes("Sisikon");
+  const isWindsurfingUrnersee = webcam.name.includes("Windsurfing Urnersee");
   const [refreshTimestamp, setRefreshTimestamp] = React.useState(Date.now());
 
   // Function to add timestamp to URL to force refresh
@@ -191,24 +192,33 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
     <Card className="overflow-hidden bg-slate-900/40 border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl">
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-0"></div>
-        <div className="w-full bg-black rounded-t-lg h-[500px] flex items-center justify-center">
+        <div className="w-full bg-black rounded-t-lg flex items-center justify-center" style={{ minHeight: '500px', maxHeight: '90vh', padding: '0' }}>
           {isSisikon ? (
             <img 
               src={currentViewWithTimestamp} 
               alt={`${webcam.name} webcam`} 
-              className="max-w-full max-h-full object-contain"
+              className="w-full h-auto object-contain"
               key={refreshTimestamp}
+              style={{ maxWidth: '100%', maxHeight: '100%', objectPosition: 'center' }}
             />
+          ) : isWindsurfingUrnersee ? (
+            <div className="w-full h-full" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img
+                src={currentView}
+                alt={`${webcam.name} webcam`}
+                className="w-full h-auto object-contain"
+                style={{ maxWidth: '100%', maxHeight: '100%', objectPosition: 'top center', transform: 'scale(0.95)' }}
+              />
+            </div>
           ) : (
-            <Image
-              src={currentView}
-              alt={`${webcam.name} webcam`}
-              width={800}
-              height={500}
-              className="w-full object-contain"
-              unoptimized={true}
-              priority={true}
-            />
+            <div className="w-full h-full" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img
+                src={currentView}
+                alt={`${webcam.name} webcam`}
+                className="w-full h-auto object-contain"
+                style={{ maxWidth: '100%', maxHeight: '100%', objectPosition: 'center' }}
+              />
+            </div>
           )}
         </div>
         {webcam.isLive && (
@@ -239,22 +249,19 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                   className="relative group cursor-pointer transform transition-all duration-200 hover:scale-105"
                   onClick={() => handleViewChange(view.image)}
                 >
-                  <div className="w-full h-32 bg-black rounded-lg shadow-md flex items-center justify-center">
+                  <div className={`w-full h-32 bg-black rounded-lg shadow-md flex items-center justify-center ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : ''}`}>
                     {isSisikon ? (
                       <img 
                         src={getRefreshedUrl(view.image)} 
                         alt={view.name}
-                        className={`max-w-full max-h-full object-contain transition-all duration-200 ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : 'opacity-80 hover:opacity-100'}`}
+                        className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
                         key={`thumb-${index}-${refreshTimestamp}`}
                       />
                     ) : (
-                      <Image
+                      <img
                         src={view.image}
                         alt={view.name}
-                        width={300}
-                        height={150}
-                        className={`w-full h-full object-contain transition-all duration-200 ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : 'opacity-80 hover:opacity-100'}`}
-                        unoptimized={true}
+                        className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
                       />
                     )}
                   </div>
