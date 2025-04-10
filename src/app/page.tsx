@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { Button } from "~/components/ui/button"
-import { Wind } from "lucide-react"
+import { Wind, Menu } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
@@ -11,12 +11,21 @@ export default function Home() {
   // State to track the selected webcam
   const [selectedWebcamIndex, setSelectedWebcamIndex] = React.useState(0);
   const [refreshKey, setRefreshKey] = React.useState(0);
-  const selectedWebcam = webcams[selectedWebcamIndex];
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  // Ensure selectedWebcam is never undefined by defaulting to first webcam
+  const selectedWebcam = webcams.length > 0 ? webcams[selectedWebcamIndex] || webcams[0] : null;
 
   // Function to handle tab change and refresh images
   const handleTabChange = (index: number) => {
     setSelectedWebcamIndex(index);
     setRefreshKey(prev => prev + 1); // Increment refresh key to force re-render
+    setMobileMenuOpen(false); // Close menu after selection
+  };
+
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
@@ -27,17 +36,53 @@ export default function Home() {
             <Wind className="h-6 w-6 text-sky-400" />
             <span className="text-xl font-bold bg-gradient-to-r from-sky-400 to-blue-500 text-transparent bg-clip-text">WindScope</span>
           </div>
+          
+          {/* Mobile burger menu button */}
+          <button 
+            className="md:hidden flex items-center justify-center p-2 rounded-full bg-slate-800/70 text-sky-400 hover:text-sky-300 transition-colors"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle location menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
         </div>
       </header>
 
-      <main className="flex-1 py-8">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-4xl text-center mb-10">
-            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text sm:text-5xl">Wind Conditions</h1>
+      <main className="flex-1 py-4 sm:py-8 relative">
+        {/* Mobile dropdown menu */}
+        {mobileMenuOpen && (
+          <div className="absolute top-0 left-0 right-0 z-20 md:hidden">
+            <div className="bg-slate-900/95 backdrop-blur-md border-b border-sky-700/30 shadow-lg py-2 px-4 max-h-[70vh] overflow-y-auto">
+              <div className="flex flex-col space-y-1">
+                {webcams.map((webcam, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleTabChange(index)}
+                    className={`px-4 py-3 rounded-lg text-left text-sm font-medium transition-all duration-200 flex items-center ${
+                      selectedWebcamIndex === index
+                        ? 'bg-sky-500/20 text-white'
+                        : 'text-sky-300/80 hover:bg-slate-800/50 hover:text-white'
+                    }`}
+                  >
+                    <span className={`w-2 h-2 rounded-full mr-2 ${selectedWebcamIndex === index ? 'bg-sky-400' : 'bg-slate-700'}`}></span>
+                    <div className="flex flex-col">
+                      <span>{webcam.name}</span>
+                      <span className="text-xs text-sky-300/60">{webcam.location}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="container mx-auto px-2 sm:px-4">
+          <div className="mx-auto max-w-4xl text-center mb-6 sm:mb-10">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text md:text-5xl">Wind Conditions</h1>
           </div>
 
-          {/* Location selector */}
-          <div className="flex justify-center mb-8">
+          {/* Desktop location selector - Hidden on mobile */}
+          <div className="hidden md:flex justify-center mb-8">
             <div className="inline-flex p-1 bg-slate-800/50 backdrop-blur-sm rounded-full">
               {webcams.map((webcam, index) => (
                 <button
@@ -55,7 +100,20 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-6 mx-auto max-w-5xl">
+          {/* Current location indicator for mobile */}
+          <div className="md:hidden flex justify-center mb-4">
+            {selectedWebcam && (
+              <button 
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 text-white font-medium"
+                onClick={toggleMobileMenu}
+              >
+                <span>{selectedWebcam.name}</span>
+                <span className="text-xs text-sky-300/80">▼</span>
+              </button>
+            )}
+          </div>
+
+          <div className="mt-4 sm:mt-6 mx-auto max-w-5xl">
             {selectedWebcam && <WebcamCard key={`webcam-${selectedWebcamIndex}-${refreshKey}`} webcam={selectedWebcam} />}
           </div>
           
@@ -206,7 +264,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
     <Card className="overflow-hidden bg-slate-900/40 border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl">
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-0"></div>
-        <div className="w-full bg-black rounded-t-lg flex items-center justify-center" style={{ minHeight: '500px', maxHeight: '90vh', padding: '0' }}>
+        <div className="w-full bg-black rounded-t-lg flex items-center justify-center" style={{ minHeight: '300px', maxHeight: '70vh', padding: '0' }}>
           {isSisikon ? (
             <img 
               src={currentViewWithTimestamp} 
@@ -236,22 +294,22 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
           )}
         </div>
       </div>
-      <CardHeader className="pb-2 relative z-10">
-        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">{webcam.name}</CardTitle>
+      <CardHeader className="pb-2 relative z-10 px-3 sm:px-6 pt-4 sm:pt-6">
+        <CardTitle className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">{webcam.name}</CardTitle>
         <CardDescription className="text-sky-300/80">{webcam.location}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-3 sm:px-6 pb-4 sm:pb-6">
         {webcam.views && webcam.views.length > 0 && (
           <div className="mt-2 pt-4 border-t border-sky-700/30">
             <p className="text-sm font-medium mb-3 text-sky-300/80">Available Views:</p>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
               {webcam.views.map((view, index) => (
                 <div 
                   key={index} 
                   className="relative group cursor-pointer transform transition-all duration-200 hover:scale-105"
                   onClick={() => handleViewChange(view.image)}
                 >
-                  <div className={`w-full h-32 bg-black rounded-lg shadow-md flex items-center justify-center ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : ''}`}>
+                  <div className={`w-full h-24 sm:h-32 bg-black rounded-lg shadow-md flex items-center justify-center ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : ''}`}>
                     {isSisikon ? (
                       <img 
                         src={getRefreshedUrl(view.image)} 
@@ -268,7 +326,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                     )}
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent rounded-lg flex items-end justify-center p-2">
-                    <span className="text-white text-sm font-medium bg-slate-900/60 backdrop-blur-sm px-3 py-1 rounded-full shadow-lg">
+                    <span className="text-white text-xs sm:text-sm font-medium bg-slate-900/60 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full shadow-lg">
                       {view.name}
                     </span>
                   </div>
