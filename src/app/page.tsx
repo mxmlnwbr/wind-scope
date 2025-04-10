@@ -276,7 +276,6 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
   return (
     <Card className="overflow-hidden bg-slate-900/40 border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl">
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-0"></div>
         <div className="w-full bg-black rounded-t-lg flex items-center justify-center" style={{ minHeight: '300px', maxHeight: '70vh', padding: '0' }}>
           {isSisikon ? (
             <img 
@@ -394,8 +393,8 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                         />
                       )}
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent rounded-lg flex items-end justify-center p-2">
-                      <span className="text-white text-sm font-medium bg-slate-900/60 backdrop-blur-sm px-3 py-1 rounded-full shadow-lg">
+                    <div className="absolute bottom-0 left-0 right-0 flex justify-center p-2">
+                      <span className="text-white text-sm font-medium bg-slate-900/70 backdrop-blur-sm px-3 py-1 rounded-full shadow-lg">
                         {view.name}
                       </span>
                     </div>
