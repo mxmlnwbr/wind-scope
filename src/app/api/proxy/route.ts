@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const headers = new Headers(response.headers);
     
     // Set appropriate content type
-    const contentType = headers.get('content-type') || 'image/jpeg';
+    const contentType = headers.get('content-type') ?? 'image/jpeg';
     
     return new NextResponse(buffer, {
       status: response.status,
