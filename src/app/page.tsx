@@ -118,12 +118,12 @@ export default function Home() {
           </div>
           
           {/* Föhn diagram */}
-          <div className="mt-2 mb-8 mx-auto max-w-4xl">
+          <div className="mt-2 mb-8 mx-auto max-w-5xl">
             <div className="bg-slate-900/40 border border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl overflow-hidden">
               <div className="p-4 border-b border-sky-700/30">
                 <h2 className="text-xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">Föhn Wind Diagram</h2>
               </div>
-              <div className="flex justify-center bg-white p-2">
+              <div className="flex justify-center bg-black p-2">
                 <img 
                   src="https://profiwetter.ch/wind_foehn_ch_de.png?t=1699802646" 
                   alt="Föhn Wind Diagram" 
@@ -283,24 +283,24 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
               alt={`${webcam.name} webcam`} 
               className="w-full h-auto object-contain"
               key={refreshTimestamp}
-              style={{ maxWidth: '100%', maxHeight: '100%', objectPosition: 'center' }}
+              style={{ width: '100%', maxHeight: '100%', objectPosition: 'center' }}
             />
           ) : isWindsurfingUrnersee ? (
-            <div className="w-full h-full" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="w-full h-full flex items-center justify-center">
               <img
                 src={currentView}
                 alt={`${webcam.name} webcam`}
                 className="w-full h-auto object-contain"
-                style={{ maxWidth: '100%', maxHeight: '100%', objectPosition: 'top center', transform: 'scale(0.95)' }}
+                style={{ width: '100%', maxHeight: '100%', objectPosition: 'top center' }}
               />
             </div>
           ) : (
-            <div className="w-full h-full" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="w-full h-full flex items-center justify-center">
               <img
                 src={currentView}
                 alt={`${webcam.name} webcam`}
                 className="w-full h-auto object-contain"
-                style={{ maxWidth: '100%', maxHeight: '100%', objectPosition: 'center' }}
+                style={{ width: '100%', maxHeight: '100%', objectPosition: 'center' }}
               />
             </div>
           )}
@@ -384,12 +384,14 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                           alt={view.name}
                           className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
                           key={`thumb-${index}-${refreshTimestamp}`}
+                          style={{ width: '100%' }}
                         />
                       ) : (
                         <img
                           src={view.image}
                           alt={view.name}
                           className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
+                          style={{ width: '100%' }}
                         />
                       )}
                     </div>
