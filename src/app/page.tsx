@@ -221,18 +221,6 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
             </div>
           )}
         </div>
-        {webcam.isLive && (
-          <div className="absolute top-3 left-3 bg-red-500/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-            </span>
-            LIVE
-          </div>
-        )}
-        <div className="absolute top-3 right-3 bg-slate-900/60 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
-          {new Date().toLocaleTimeString()}
-        </div>
       </div>
       <CardHeader className="pb-2 relative z-10">
         <CardTitle className="text-2xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">{webcam.name}</CardTitle>
