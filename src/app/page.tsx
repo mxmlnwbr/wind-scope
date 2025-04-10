@@ -14,7 +14,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   // Ensure selectedWebcam is never undefined by defaulting to first webcam
-  const selectedWebcam = webcams.length > 0 ? webcams[selectedWebcamIndex] || webcams[0] : null;
+  const selectedWebcam = webcams.length > 0 ? webcams[selectedWebcamIndex] ?? webcams[0] : null;
 
   // Function to handle tab change and refresh images
   const handleTabChange = (index: number) => {
@@ -271,7 +271,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
   const currentViewWithTimestamp = getRefreshedUrl(currentView);
 
   // Find the name of the current view
-  const currentViewName = webcam.views?.find(view => view.image === currentView)?.name || "Main View";
+  const currentViewName = webcam.views?.find(view => view.image === currentView)?.name ?? "Main View";
 
   return (
     <Card className="overflow-hidden bg-slate-900/40 border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl">
