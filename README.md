@@ -1,29 +1,51 @@
-# Create T3 App
+# WindScope
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+WindScope is a web application that displays live webcam feeds and wind information from various windsurfing and water sports locations around the world. The application provides real-time updates on wind conditions, webcam views, and other relevant information for water sports enthusiasts.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- Live webcam feeds from popular windsurfing locations
+- Real-time wind speed and condition information
+- Multiple viewing angles for select locations
+- Educational wind diagrams and resources
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Technologies Used
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- [Next.js](https://nextjs.org) - React framework for building the UI
+- [Tailwind CSS](https://tailwindcss.com) - For styling
+- [Shadcn UI](https://ui.shadcn.com/) - Component library
 
-## Learn More
+## Getting Started
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Prerequisites
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- Node.js (v18 or higher)
+- pnpm (v8 or higher)
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### Installation
 
-## How do I deploy this?
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd wind-scope
+   ```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+3. Run the development server:
+   ```bash
+   pnpm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+## Adding New Webcams
+
+To add new webcams, update the `webcams` array in `src/app/page.tsx` with the new webcam information. If using external image URLs, make sure to add the domain to the `images.domains` array in `next.config.js`.
+
+## Deployment
+
+This application can be deployed on platforms like Vercel, Netlify, or using Docker. Follow the respective platform's deployment guides for more information.
