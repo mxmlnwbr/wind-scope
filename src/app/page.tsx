@@ -116,11 +116,11 @@ const webcams: Webcam[] = [
     isLive: true,
     views: [
       {
-        name: "View 1",
+        name: "North View",
         image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera04.jpg",
       },
       {
-        name: "View 2",
+        name: "South View",
         image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera05.jpg",
       },
     ],
