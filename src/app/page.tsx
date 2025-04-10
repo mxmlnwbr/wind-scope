@@ -3,7 +3,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { Button } from "~/components/ui/button"
 import { Wind, Menu } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 
@@ -129,6 +128,7 @@ export default function Home() {
                   alt="Föhn Wind Diagram" 
                   className="max-w-full h-auto"
                   style={{ maxHeight: '400px' }}
+                  loading="lazy"
                 />
               </div>
             </div>
@@ -285,6 +285,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                 className="w-full h-auto object-contain cursor-pointer"
                 key={refreshTimestamp}
                 style={{ width: '100%', maxHeight: '100%', objectPosition: 'center' }}
+                loading="lazy"
               />
             </a>
           ) : isWindsurfingUrnersee ? (
@@ -294,6 +295,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                 alt={`${webcam.name} webcam`}
                 className="w-full h-auto object-contain cursor-pointer"
                 style={{ width: '100%', maxHeight: '100%', objectPosition: 'top center' }}
+                loading="lazy"
               />
             </a>
           ) : (
@@ -303,6 +305,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                 alt={`${webcam.name} webcam`}
                 className="w-full h-auto object-contain cursor-pointer"
                 style={{ width: '100%', maxHeight: '100%', objectPosition: 'center' }}
+                loading="lazy"
               />
             </a>
           )}
@@ -350,12 +353,14 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                             alt={view.name}
                             className="w-full h-full object-cover"
                             key={`thumb-mobile-${index}-${refreshTimestamp}`}
+                            loading="lazy"
                           />
                         ) : (
                           <img
                             src={view.image}
                             alt={view.name}
                             className="w-full h-full object-cover"
+                            loading="lazy"
                           />
                         )}
                       </div>
@@ -387,6 +392,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                           className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
                           key={`thumb-${index}-${refreshTimestamp}`}
                           style={{ width: '100%' }}
+                          loading="lazy"
                         />
                       ) : (
                         <img
@@ -394,6 +400,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                           alt={view.name}
                           className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
                           style={{ width: '100%' }}
+                          loading="lazy"
                         />
                       )}
                     </div>

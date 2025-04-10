@@ -33,6 +33,11 @@ export const metadata: Metadata = {
     description: "Live webcam feeds and wind information for windsurfing locations",
     images: ["/og-image.jpg"], // Same as OpenGraph image
   },
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
+    'format-detection': 'telephone=no',
+  }
 };
 
 const geist = Geist({
@@ -45,7 +50,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geist.variable}`}>
-      <body>{children}</body>
+      <head>
+        <link rel="preconnect" href="https://profiwetter.ch" />
+        <link rel="dns-prefetch" href="https://profiwetter.ch" />
+      </head>
+      <body className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-slate-50 flex flex-col">
+        {children}
+      </body>
     </html>
   );
 }
