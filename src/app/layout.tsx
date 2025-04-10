@@ -5,7 +5,7 @@ import { Geist } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "WindScope",
-  description: "Live webcam feeds and wind information for windsurfing and water sports locations around the world",
+  description: "Live webcam feeds and wind information for Urnersee",
   icons: [{ rel: "icon", url: "/wind-scope.ico" }],
   keywords: ["windsurfing", "webcams", "wind conditions", "water sports", "live feeds"],
   authors: [{ name: "WindScope Team" }],
