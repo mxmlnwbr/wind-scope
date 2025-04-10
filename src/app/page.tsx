@@ -229,6 +229,7 @@ const webcams: Webcam[] = [
 
 function WebcamCard({ webcam }: { webcam: Webcam }) {
   const [currentView, setCurrentView] = React.useState<string>(webcam.image);
+  const [viewsExpanded, setViewsExpanded] = React.useState(false);
   const isSisikon = webcam.name.includes("Sisikon");
   const isWindsurfingUrnersee = webcam.name.includes("Windsurfing Urnersee");
   const [refreshTimestamp, setRefreshTimestamp] = React.useState(Date.now());
@@ -246,6 +247,15 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
   const handleViewChange = (viewUrl: string) => {
     setCurrentView(viewUrl);
     setRefreshTimestamp(Date.now());
+    // On mobile, collapse the views panel after selection
+    if (window.innerWidth < 768) {
+      setViewsExpanded(false);
+    }
+  };
+
+  // Toggle views expanded state (for mobile)
+  const toggleViewsExpanded = () => {
+    setViewsExpanded(!viewsExpanded);
   };
 
   // Auto-refresh every 30 seconds
@@ -259,6 +269,9 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
 
   // Get the current view URL with timestamp for refreshing
   const currentViewWithTimestamp = getRefreshedUrl(currentView);
+
+  // Find the name of the current view
+  const currentViewName = webcam.views?.find(view => view.image === currentView)?.name || "Main View";
 
   return (
     <Card className="overflow-hidden bg-slate-900/40 border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl">
@@ -299,39 +312,96 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
         <CardDescription className="text-sky-300/80">{webcam.location}</CardDescription>
       </CardHeader>
       <CardContent className="px-3 sm:px-6 pb-4 sm:pb-6">
-        {webcam.views && webcam.views.length > 0 && (
+        {webcam.views && webcam.views.length > 1 && (
           <div className="mt-2 pt-4 border-t border-sky-700/30">
-            <p className="text-sm font-medium mb-3 text-sky-300/80">Available Views:</p>
-            <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
-              {webcam.views.map((view, index) => (
-                <div 
-                  key={index} 
-                  className="relative group cursor-pointer transform transition-all duration-200 hover:scale-105"
-                  onClick={() => handleViewChange(view.image)}
-                >
-                  <div className={`w-full h-24 sm:h-32 bg-black rounded-lg shadow-md flex items-center justify-center ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : ''}`}>
-                    {isSisikon ? (
-                      <img 
-                        src={getRefreshedUrl(view.image)} 
-                        alt={view.name}
-                        className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
-                        key={`thumb-${index}-${refreshTimestamp}`}
-                      />
-                    ) : (
-                      <img
-                        src={view.image}
-                        alt={view.name}
-                        className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
-                      />
-                    )}
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent rounded-lg flex items-end justify-center p-2">
-                    <span className="text-white text-xs sm:text-sm font-medium bg-slate-900/60 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full shadow-lg">
-                      {view.name}
-                    </span>
-                  </div>
+            {/* Mobile view selector */}
+            <div className="md:hidden">
+              <div className="flex items-center justify-between mb-3">
+                {webcam.views && webcam.views.length > 1 && (
+                  <>
+                    <p className="text-sm font-medium text-sky-300/80">Current View: <span className="text-white">{currentViewName}</span></p>
+                    <button 
+                      onClick={toggleViewsExpanded}
+                      className="text-xs px-3 py-1 rounded-full bg-slate-800/70 text-sky-300 hover:text-white transition-colors"
+                    >
+                      {viewsExpanded ? 'Hide Views' : 'Change View'}
+                    </button>
+                  </>
+                )}
+              </div>
+              
+              {viewsExpanded && (
+                <div className="space-y-2 mt-3 mb-2">
+                  {webcam.views.map((view, index) => (
+                    <button 
+                      key={index} 
+                      className={`w-full flex items-center p-2 rounded-lg transition-all duration-200 ${
+                        currentView === view.image 
+                          ? 'bg-sky-500/20 text-white' 
+                          : 'bg-slate-800/50 text-sky-300/80 hover:text-white'
+                      }`}
+                      onClick={() => handleViewChange(view.image)}
+                    >
+                      <div className="w-16 h-16 bg-black rounded-md mr-3 flex-shrink-0 overflow-hidden">
+                        {isSisikon ? (
+                          <img 
+                            src={getRefreshedUrl(view.image)} 
+                            alt={view.name}
+                            className="w-full h-full object-cover"
+                            key={`thumb-mobile-${index}-${refreshTimestamp}`}
+                          />
+                        ) : (
+                          <img
+                            src={view.image}
+                            alt={view.name}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                      </div>
+                      <span className="font-medium">{view.name}</span>
+                      {currentView === view.image && (
+                        <span className="ml-auto w-2 h-2 rounded-full bg-sky-400"></span>
+                      )}
+                    </button>
+                  ))}
                 </div>
-              ))}
+              )}
+            </div>
+            
+            {/* Desktop view selector - grid layout */}
+            <div className="hidden md:block">
+              <p className="text-sm font-medium mb-3 text-sky-300/80">Available Views:</p>
+              <div className="grid grid-cols-2 gap-4">
+                {webcam.views.map((view, index) => (
+                  <div 
+                    key={index} 
+                    className="relative group cursor-pointer transform transition-all duration-200 hover:scale-105"
+                    onClick={() => handleViewChange(view.image)}
+                  >
+                    <div className={`w-full h-32 bg-black rounded-lg shadow-md flex items-center justify-center ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : ''}`}>
+                      {isSisikon ? (
+                        <img 
+                          src={getRefreshedUrl(view.image)} 
+                          alt={view.name}
+                          className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
+                          key={`thumb-${index}-${refreshTimestamp}`}
+                        />
+                      ) : (
+                        <img
+                          src={view.image}
+                          alt={view.name}
+                          className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
+                        />
+                      )}
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent rounded-lg flex items-end justify-center p-2">
+                      <span className="text-white text-sm font-medium bg-slate-900/60 backdrop-blur-sm px-3 py-1 rounded-full shadow-lg">
+                        {view.name}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
