@@ -108,6 +108,34 @@ const webcams: Webcam[] = [
     ],
   },
   {
+    name: "Flüelen, Windsurfing Urnersee",
+    location: "Switzerland",
+    image: "https://meteo.windsurfing-urnersee.ch/webcam_rechts.jpg",
+    windSpeed: "10-15 knots",
+    lastUpdated: "Just now",
+    isLive: true,
+    views: [
+      {
+        name: "Main View",
+        image: "https://meteo.windsurfing-urnersee.ch/webcam_rechts.jpg",
+      },
+    ],
+  },
+  {
+    name: "Isleten",
+    location: "Switzerland",
+    image: "https://meteo.windsurfing-urnersee.ch/webcam_isleten.jpg",
+    windSpeed: "8-12 knots",
+    lastUpdated: "Just now",
+    isLive: true,
+    views: [
+      {
+        name: "Main View",
+        image: "https://meteo.windsurfing-urnersee.ch/webcam_isleten.jpg",
+      },
+    ],
+  },
+  {
     name: "Sisikon, Bootshafen",
     location: "Switzerland",
     image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera04.jpg",

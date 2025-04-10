@@ -7,7 +7,7 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    domains: ["elbeato.bplaced.net", "bhsboots.myhostpoint.ch"],
+    domains: ["elbeato.bplaced.net", "bhsboots.myhostpoint.ch", "meteo.windsurfing-urnersee.ch"],
     remotePatterns: [
       {
         protocol: 'https',
@@ -20,6 +20,10 @@ const config = {
       {
         protocol: 'http',
         hostname: 'bhsboots.myhostpoint.ch',
+      },
+      {
+        protocol: 'https',
+        hostname: 'meteo.windsurfing-urnersee.ch',
       },
     ],
     unoptimized: true,
