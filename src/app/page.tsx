@@ -306,7 +306,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
           )}
         </div>
       </div>
-      <CardHeader className="pb-2 relative z-10 px-3 sm:px-6 pt-4 sm:pt-6">
+      <CardHeader className="pb-2 relative z-10 px-3 sm:px-6 pt-4 pb-8 sm:pt-6">
         <CardTitle className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">{webcam.name}</CardTitle>
         <CardDescription className="text-sky-300/80">{webcam.location}</CardDescription>
       </CardHeader>
