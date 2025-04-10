@@ -276,7 +276,7 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
   return (
     <Card className="overflow-hidden bg-slate-900/40 border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl">
       <div className="relative">
-        <div className="w-full bg-black rounded-t-lg flex items-center justify-center" style={{ minHeight: '300px', maxHeight: '70vh', padding: '0' }}>
+        <div className="w-full bg-black rounded-t-lg flex items-center justify-center" style={{ minHeight: '400px', maxHeight: '90vh', padding: '0' }}>
           {isSisikon ? (
             <a href={currentView} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">
               <img 
@@ -293,8 +293,14 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
               <img
                 src={currentView}
                 alt={`${webcam.name} webcam`}
-                className="w-full h-auto object-contain cursor-pointer"
-                style={{ width: '100%', maxHeight: '100%', objectPosition: 'top center' }}
+                className="cursor-pointer"
+                style={{ 
+                  width: '100%', 
+                  height: 'auto', 
+                  maxHeight: '100%', 
+                  objectFit: 'contain',
+                  objectPosition: 'top center'
+                }}
                 loading="lazy"
               />
             </a>
@@ -303,8 +309,14 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
               <img
                 src={currentView}
                 alt={`${webcam.name} webcam`}
-                className="w-full h-auto object-contain cursor-pointer"
-                style={{ width: '100%', maxHeight: '100%', objectPosition: 'center' }}
+                className="cursor-pointer"
+                style={{ 
+                  width: '100%', 
+                  height: 'auto', 
+                  maxHeight: '100%', 
+                  objectFit: 'contain',
+                  objectPosition: 'center'
+                }}
                 loading="lazy"
               />
             </a>
