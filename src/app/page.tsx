@@ -278,31 +278,33 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
       <div className="relative">
         <div className="w-full bg-black rounded-t-lg flex items-center justify-center" style={{ minHeight: '300px', maxHeight: '70vh', padding: '0' }}>
           {isSisikon ? (
-            <img 
-              src={currentViewWithTimestamp} 
-              alt={`${webcam.name} webcam`} 
-              className="w-full h-auto object-contain"
-              key={refreshTimestamp}
-              style={{ width: '100%', maxHeight: '100%', objectPosition: 'center' }}
-            />
-          ) : isWindsurfingUrnersee ? (
-            <div className="w-full h-full flex items-center justify-center">
-              <img
-                src={currentView}
-                alt={`${webcam.name} webcam`}
-                className="w-full h-auto object-contain"
-                style={{ width: '100%', maxHeight: '100%', objectPosition: 'top center' }}
-              />
-            </div>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <img
-                src={currentView}
-                alt={`${webcam.name} webcam`}
-                className="w-full h-auto object-contain"
+            <a href={currentView} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">
+              <img 
+                src={currentViewWithTimestamp} 
+                alt={`${webcam.name} webcam`} 
+                className="w-full h-auto object-contain cursor-pointer"
+                key={refreshTimestamp}
                 style={{ width: '100%', maxHeight: '100%', objectPosition: 'center' }}
               />
-            </div>
+            </a>
+          ) : isWindsurfingUrnersee ? (
+            <a href={currentView} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">
+              <img
+                src={currentView}
+                alt={`${webcam.name} webcam`}
+                className="w-full h-auto object-contain cursor-pointer"
+                style={{ width: '100%', maxHeight: '100%', objectPosition: 'top center' }}
+              />
+            </a>
+          ) : (
+            <a href={currentView} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">
+              <img
+                src={currentView}
+                alt={`${webcam.name} webcam`}
+                className="w-full h-auto object-contain cursor-pointer"
+                style={{ width: '100%', maxHeight: '100%', objectPosition: 'center' }}
+              />
+            </a>
           )}
         </div>
       </div>
