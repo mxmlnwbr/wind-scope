@@ -8,8 +8,9 @@ import Link from "next/link"
 import React from "react"
 
 export default function Home() {
-  // Ensure webcam data is available
-  const firstWebcam = webcams.length > 0 ? webcams[0] : null;
+  // State to track the selected webcam
+  const [selectedWebcamIndex, setSelectedWebcamIndex] = React.useState(0);
+  const selectedWebcam = webcams[selectedWebcamIndex];
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 text-white">
@@ -31,8 +32,27 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-10 mx-auto max-w-5xl">
-            {firstWebcam && <WebcamCard webcam={firstWebcam} />}
+          {/* Location selector */}
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex p-1 bg-slate-800/50 backdrop-blur-sm rounded-full">
+              {webcams.map((webcam, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedWebcamIndex(index)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    selectedWebcamIndex === index
+                      ? 'bg-sky-500 text-white shadow-lg'
+                      : 'text-sky-300/80 hover:text-white'
+                  }`}
+                >
+                  {webcam.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 mx-auto max-w-5xl">
+            {selectedWebcam && <WebcamCard webcam={selectedWebcam} />}
           </div>
         </div>
       </main>
@@ -80,23 +100,53 @@ const webcams: Webcam[] = [
       },
     ],
   },
+  {
+    name: "Sisikon, Bootshafen",
+    location: "Switzerland",
+    image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera04.jpg",
+    windSpeed: "8-12 knots",
+    lastUpdated: "Just now",
+    isLive: true,
+    views: [
+      {
+        name: "View 1",
+        image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera04.jpg",
+      },
+      {
+        name: "View 2",
+        image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera05.jpg",
+      },
+    ],
+  },
 ]
 
 function WebcamCard({ webcam }: { webcam: Webcam }) {
   const [currentView, setCurrentView] = React.useState<string>(webcam.image);
+  const isSisikon = webcam.name.includes("Sisikon");
 
   return (
     <Card className="overflow-hidden bg-slate-900/40 border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl">
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-0"></div>
-        <Image
-          src={currentView || "/placeholder.svg"}
-          alt={`${webcam.name} webcam`}
-          width={800}
-          height={500}
-          className="w-full object-contain bg-black rounded-t-lg"
-          unoptimized={true}
-        />
+        <div className="w-full bg-black rounded-t-lg h-[500px] flex items-center justify-center">
+          {isSisikon ? (
+            <img 
+              src={currentView} 
+              alt={`${webcam.name} webcam`} 
+              className="max-w-full max-h-full object-contain"
+            />
+          ) : (
+            <Image
+              src={currentView}
+              alt={`${webcam.name} webcam`}
+              width={800}
+              height={500}
+              className="w-full object-contain"
+              unoptimized={true}
+              priority={true}
+            />
+          )}
+        </div>
         {webcam.isLive && (
           <div className="absolute top-3 left-3 bg-red-500/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg">
             <span className="relative flex h-2 w-2">
@@ -122,14 +172,24 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                   className="relative group cursor-pointer transform transition-all duration-200 hover:scale-105"
                   onClick={() => setCurrentView(view.image)}
                 >
-                  <Image
-                    src={view.image || "/placeholder.svg"}
-                    alt={view.name}
-                    width={300}
-                    height={150}
-                    className={`w-full h-32 object-contain bg-black rounded-lg shadow-md transition-all duration-200 ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : 'opacity-80 hover:opacity-100'}`}
-                    unoptimized={true}
-                  />
+                  <div className="w-full h-32 bg-black rounded-lg shadow-md flex items-center justify-center">
+                    {isSisikon ? (
+                      <img 
+                        src={view.image} 
+                        alt={view.name}
+                        className={`max-w-full max-h-full object-contain transition-all duration-200 ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : 'opacity-80 hover:opacity-100'}`}
+                      />
+                    ) : (
+                      <Image
+                        src={view.image}
+                        alt={view.name}
+                        width={300}
+                        height={150}
+                        className={`w-full h-full object-contain transition-all duration-200 ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : 'opacity-80 hover:opacity-100'}`}
+                        unoptimized={true}
+                      />
+                    )}
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent rounded-lg flex items-end justify-center p-2">
                     <span className="text-white text-sm font-medium bg-slate-900/60 backdrop-blur-sm px-3 py-1 rounded-full shadow-lg">
                       {view.name}
