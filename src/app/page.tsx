@@ -34,9 +34,6 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl text-center mb-10">
             <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text sm:text-5xl">Wind Conditions</h1>
-            <p className="mt-4 text-lg text-sky-300/80">
-              Monitor real-time wind conditions at popular locations.
-            </p>
           </div>
 
           {/* Location selector */}
