@@ -123,13 +123,15 @@ export default function Home() {
                 <h2 className="text-xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">Föhn Wind Diagram</h2>
               </div>
               <div className="flex justify-center bg-black p-2">
-                <img 
-                  src="https://profiwetter.ch/wind_foehn_ch_de.png?t=1699802646" 
-                  alt="Föhn Wind Diagram" 
-                  className="max-w-full h-auto"
-                  style={{ maxHeight: '400px' }}
-                  loading="lazy"
-                />
+                <a href="https://profiwetter.ch/wind_foehn_ch_de.png?t=1699802646" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://profiwetter.ch/wind_foehn_ch_de.png?t=1699802646" 
+                    alt="Föhn Wind Diagram" 
+                    className="max-w-full h-auto cursor-pointer"
+                    style={{ maxHeight: '400px' }}
+                    loading="lazy"
+                  />
+                </a>
               </div>
             </div>
           </div>
