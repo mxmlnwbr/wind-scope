@@ -151,9 +151,6 @@ interface Webcam {
   name: string
   location: string
   image: string
-  windSpeed: string
-  lastUpdated: string
-  isLive?: boolean
   views?: {
     name: string
     image: string
@@ -165,9 +162,6 @@ const webcams: Webcam[] = [
     name: "Flüelen, Gruonbach",
     location: "Switzerland",
     image: "https://elbeato.bplaced.net/webcamSurfclub/webcam_bucht.jpg",
-    windSpeed: "10-15 knots",
-    lastUpdated: "Just now",
-    isLive: true,
     views: [
       {
         name: "Bay View",
@@ -183,9 +177,6 @@ const webcams: Webcam[] = [
     name: "Sisikon, Bootshafen",
     location: "Switzerland",
     image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera04.jpg",
-    windSpeed: "8-12 knots",
-    lastUpdated: "Just now",
-    isLive: true,
     views: [
       {
         name: "North View",
@@ -201,9 +192,6 @@ const webcams: Webcam[] = [
     name: "Oberaegeri",
     location: "Segel Club Aegeri",
     image: "https://vcdn.bergfex.at/webcams/archive.new/downsized/4/23544/2025/04/10/23544_2025-04-10_1445_688d47e0ed941b8b.jpg",
-    windSpeed: "8-12 knots",
-    lastUpdated: "Just now",
-    isLive: true,
     views: [
       {
         name: "Main View",
@@ -215,9 +203,6 @@ const webcams: Webcam[] = [
     name: "Flüelen, Windsurfing Urnersee",
     location: "Switzerland",
     image: "https://meteo.windsurfing-urnersee.ch/webcam_rechts.jpg",
-    windSpeed: "10-15 knots",
-    lastUpdated: "Just now",
-    isLive: true,
     views: [
       {
         name: "Main View",
@@ -229,9 +214,6 @@ const webcams: Webcam[] = [
     name: "Isleten",
     location: "Switzerland",
     image: "https://meteo.windsurfing-urnersee.ch/webcam_isleten.jpg",
-    windSpeed: "8-12 knots",
-    lastUpdated: "Just now",
-    isLive: true,
     views: [
       {
         name: "Main View",
