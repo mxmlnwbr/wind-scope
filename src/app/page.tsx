@@ -1,9 +1,12 @@
+"use client"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { Button } from "~/components/ui/button"
 import { Compass, Info, Map, Wind } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import React from "react"
 
 export default function Home() {
   return (
@@ -297,11 +300,13 @@ const diagrams: Diagram[] = [
 ]
 
 function WebcamCard({ webcam }: { webcam: Webcam }) {
+  const [currentView, setCurrentView] = React.useState<string>(webcam.image);
+
   return (
     <Card className="overflow-hidden">
       <div className="relative">
         <Image
-          src={webcam.image || "/placeholder.svg"}
+          src={currentView || "/placeholder.svg"}
           alt={`${webcam.name} webcam`}
           width={350}
           height={200}
@@ -337,13 +342,17 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
             <p className="text-sm font-medium mb-2">Available Views:</p>
             <div className="grid grid-cols-2 gap-2">
               {webcam.views.map((view, index) => (
-                <div key={index} className="relative group cursor-pointer">
+                <div 
+                  key={index} 
+                  className="relative group cursor-pointer"
+                  onClick={() => setCurrentView(view.image)}
+                >
                   <Image
                     src={view.image || "/placeholder.svg"}
                     alt={view.name}
                     width={150}
                     height={80}
-                    className="w-full h-16 object-cover rounded-md"
+                    className={`w-full h-16 object-cover rounded-md ${currentView === view.image ? 'ring-2 ring-sky-500' : ''}`}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 rounded-md flex items-center justify-center">
                     <span className="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
