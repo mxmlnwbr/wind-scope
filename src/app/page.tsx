@@ -125,16 +125,20 @@ const webcams: Webcam[] = [
     ],
   },
   {
-    name: "Flüelen, Windsurfing Urnersee",
+    name: "Sisikon, Bootshafen",
     location: "Switzerland",
-    image: "https://meteo.windsurfing-urnersee.ch/webcam_rechts.jpg",
-    windSpeed: "10-15 knots",
+    image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera04.jpg",
+    windSpeed: "8-12 knots",
     lastUpdated: "Just now",
     isLive: true,
     views: [
       {
-        name: "Main View",
-        image: "https://meteo.windsurfing-urnersee.ch/webcam_rechts.jpg",
+        name: "North View",
+        image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera04.jpg",
+      },
+      {
+        name: "South View",
+        image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera05.jpg",
       },
     ],
   },
@@ -153,20 +157,16 @@ const webcams: Webcam[] = [
     ],
   },
   {
-    name: "Sisikon, Bootshafen",
+    name: "Flüelen, Windsurfing Urnersee",
     location: "Switzerland",
-    image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera04.jpg",
-    windSpeed: "8-12 knots",
+    image: "https://meteo.windsurfing-urnersee.ch/webcam_rechts.jpg",
+    windSpeed: "10-15 knots",
     lastUpdated: "Just now",
     isLive: true,
     views: [
       {
-        name: "North View",
-        image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera04.jpg",
-      },
-      {
-        name: "South View",
-        image: "/api/proxy?url=http://bhsboots.myhostpoint.ch/kamera05.jpg",
+        name: "Main View",
+        image: "https://meteo.windsurfing-urnersee.ch/webcam_rechts.jpg",
       },
     ],
   },
