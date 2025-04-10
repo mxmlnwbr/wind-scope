@@ -10,7 +10,14 @@ import React from "react"
 export default function Home() {
   // State to track the selected webcam
   const [selectedWebcamIndex, setSelectedWebcamIndex] = React.useState(0);
+  const [refreshKey, setRefreshKey] = React.useState(0);
   const selectedWebcam = webcams[selectedWebcamIndex];
+
+  // Function to handle tab change and refresh images
+  const handleTabChange = (index: number) => {
+    setSelectedWebcamIndex(index);
+    setRefreshKey(prev => prev + 1); // Increment refresh key to force re-render
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 text-white">
@@ -38,7 +45,7 @@ export default function Home() {
               {webcams.map((webcam, index) => (
                 <button
                   key={index}
-                  onClick={() => setSelectedWebcamIndex(index)}
+                  onClick={() => handleTabChange(index)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                     selectedWebcamIndex === index
                       ? 'bg-sky-500 text-white shadow-lg'
@@ -52,7 +59,7 @@ export default function Home() {
           </div>
 
           <div className="mt-6 mx-auto max-w-5xl">
-            {selectedWebcam && <WebcamCard webcam={selectedWebcam} />}
+            {selectedWebcam && <WebcamCard key={`webcam-${selectedWebcamIndex}-${refreshKey}`} webcam={selectedWebcam} />}
           </div>
         </div>
       </main>
@@ -123,6 +130,34 @@ const webcams: Webcam[] = [
 function WebcamCard({ webcam }: { webcam: Webcam }) {
   const [currentView, setCurrentView] = React.useState<string>(webcam.image);
   const isSisikon = webcam.name.includes("Sisikon");
+  const [refreshTimestamp, setRefreshTimestamp] = React.useState(Date.now());
+
+  // Function to add timestamp to URL to force refresh
+  const getRefreshedUrl = (url: string) => {
+    // Only add timestamp for proxy URLs
+    if (url.startsWith('/api/proxy')) {
+      return `${url}&t=${Date.now()}`;
+    }
+    return url;
+  };
+
+  // Handle view change with refresh
+  const handleViewChange = (viewUrl: string) => {
+    setCurrentView(viewUrl);
+    setRefreshTimestamp(Date.now());
+  };
+
+  // Auto-refresh every 30 seconds
+  React.useEffect(() => {
+    const intervalId = setInterval(() => {
+      setRefreshTimestamp(Date.now());
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Get the current view URL with timestamp for refreshing
+  const currentViewWithTimestamp = getRefreshedUrl(currentView);
 
   return (
     <Card className="overflow-hidden bg-slate-900/40 border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl">
@@ -131,9 +166,10 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
         <div className="w-full bg-black rounded-t-lg h-[500px] flex items-center justify-center">
           {isSisikon ? (
             <img 
-              src={currentView} 
+              src={currentViewWithTimestamp} 
               alt={`${webcam.name} webcam`} 
               className="max-w-full max-h-full object-contain"
+              key={refreshTimestamp}
             />
           ) : (
             <Image
@@ -156,6 +192,9 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
             LIVE
           </div>
         )}
+        <div className="absolute top-3 right-3 bg-slate-900/60 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
+          {new Date().toLocaleTimeString()}
+        </div>
       </div>
       <CardHeader className="pb-2 relative z-10">
         <CardTitle className="text-2xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">{webcam.name}</CardTitle>
@@ -170,14 +209,15 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
                 <div 
                   key={index} 
                   className="relative group cursor-pointer transform transition-all duration-200 hover:scale-105"
-                  onClick={() => setCurrentView(view.image)}
+                  onClick={() => handleViewChange(view.image)}
                 >
                   <div className="w-full h-32 bg-black rounded-lg shadow-md flex items-center justify-center">
                     {isSisikon ? (
                       <img 
-                        src={view.image} 
+                        src={getRefreshedUrl(view.image)} 
                         alt={view.name}
                         className={`max-w-full max-h-full object-contain transition-all duration-200 ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : 'opacity-80 hover:opacity-100'}`}
+                        key={`thumb-${index}-${refreshTimestamp}`}
                       />
                     ) : (
                       <Image
