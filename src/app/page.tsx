@@ -152,6 +152,15 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center text-sky-400/60">
             <p>&copy; {new Date().getFullYear()} WindScope. All rights reserved.</p>
+            <p className="mt-3 text-sm">
+              <span className="opacity-80">Have feedback or suggestions? </span>
+              <a 
+                href="mailto:maximilian.weber@bluewin.ch" 
+                className="inline-block ml-1 px-3 py-1 bg-sky-700/40 hover:bg-sky-600/50 text-sky-300 hover:text-white rounded-md transition-colors text-xs font-medium border border-sky-700/50"
+              >
+                Send Feedback
+              </a>
+            </p>
           </div>
         </div>
       </footer>
