@@ -1,10 +1,8 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
-import { Button } from "~/components/ui/button"
 import { Wind, Menu } from "lucide-react"
-import Link from "next/link"
-import React from "react"
+import React, { useEffect } from "react"
 
 export default function Home() {
   // State to track the selected webcam
@@ -115,6 +113,18 @@ export default function Home() {
           <div className="mt-4 sm:mt-6 mx-auto max-w-5xl">
             {selectedWebcam && <WebcamCard key={`webcam-${selectedWebcamIndex}-${refreshKey}`} webcam={selectedWebcam} />}
           </div>
+
+          {/* Windguru Forecast Overview */}
+          <div className="mt-2 mb-8 mx-auto max-w-5xl">
+            <div className="bg-slate-900/40 border border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl overflow-hidden">
+              <div className="p-4 border-b border-sky-700/30">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">Windguru Forecast</h2>
+              </div>
+              <div className="p-2 bg-white">
+                <WindguruWidget />
+              </div>
+            </div>
+          </div>
           
           {/* Föhn diagram */}
           <div className="mt-2 mb-8 mx-auto max-w-5xl">
@@ -224,6 +234,63 @@ const webcams: Webcam[] = [
     ],
   },
 ]
+
+// Windguru Widget Component
+function WindguruWidget() {
+  // This component will only run on the client side
+  useEffect(() => {
+    // Create a unique ID for this instance
+    const widgetId = "wg_fwdg_988948_100_" + Date.now();
+    
+    // Create container div
+    const container = document.createElement('div');
+    container.id = widgetId;
+    document.getElementById('windguru-container')?.appendChild(container);
+    
+    // Load the Windguru script
+    const loadWindguruWidget = () => {
+      const arg = [
+        "s=988948",
+        "m=100",
+        "uid=" + widgetId,
+        "ai=0",
+        "wj=knots",
+        "tj=c",
+        "waj=m",
+        "tij=cm",
+        "odh=0",
+        "doh=24",
+        "fhours=240",
+        "hrsm=2",
+        "vt=forecasts",
+        "lng=en",
+        "idbs=1",
+        "p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"
+      ];
+      
+      const script = document.createElement("script");
+      script.src = "https://www.windguru.cz/js/widget.php?" + (arg.join("&"));
+      document.body.appendChild(script);
+    };
+    
+    // Load the widget
+    loadWindguruWidget();
+    
+    // Cleanup function
+    return () => {
+      const container = document.getElementById(widgetId);
+      if (container) {
+        container.remove();
+      }
+    };
+  }, []);
+  
+  return (
+    <div className="windguru-wrapper">
+      <div id="windguru-container" className="w-full overflow-x-auto"></div>
+    </div>
+  );
+}
 
 function WebcamCard({ webcam }: { webcam: Webcam }) {
   const [currentView, setCurrentView] = React.useState<string>(webcam.image);
