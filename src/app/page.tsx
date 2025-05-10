@@ -9,15 +9,46 @@ export default function Home() {
   const [selectedWebcamIndex, setSelectedWebcamIndex] = React.useState(0);
   const [refreshKey, setRefreshKey] = React.useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [currentViewUrl, setCurrentViewUrl] = React.useState<string>("");
+  
+  // Effect to handle URL parameters for location sharing
+  useEffect(() => {
+    // Check for location parameter in URL
+    const params = new URLSearchParams(window.location.search);
+    const locationParam = params.get('location');
+    
+    if (locationParam) {
+      // Find the webcam index that matches the location parameter
+      const index = webcams.findIndex(webcam => 
+        webcam.name.toLowerCase().replace(/[^a-z0-9]/g, '') === 
+        locationParam.toLowerCase().replace(/[^a-z0-9]/g, '')
+      );
+      
+      if (index !== -1) {
+        setSelectedWebcamIndex(index);
+      }
+    }
+  }, []);
 
   // Ensure selectedWebcam is never undefined by defaulting to first webcam
   const selectedWebcam = webcams.length > 0 ? webcams[selectedWebcamIndex] ?? webcams[0] : null;
 
-  // Function to handle tab change and refresh images
+  // Function to handle tab change, refresh images, and update URL
   const handleTabChange = (index: number) => {
     setSelectedWebcamIndex(index);
     setRefreshKey(prev => prev + 1); // Increment refresh key to force re-render
     setMobileMenuOpen(false); // Close menu after selection
+    
+    // Update URL for sharing
+    if (webcams[index]) {
+      const locationSlug = webcams[index].name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      // Update URL without page reload
+      window.history.pushState(
+        { webcamIndex: index },
+        webcams[index].name,
+        `?location=${locationSlug}`
+      );
+    }
   };
 
   // Toggle mobile menu
@@ -111,7 +142,13 @@ export default function Home() {
           </div>
 
           <div className="mt-4 sm:mt-6 mx-auto max-w-5xl">
-            {selectedWebcam && <WebcamCard key={`webcam-${selectedWebcamIndex}-${refreshKey}`} webcam={selectedWebcam} />}
+            {selectedWebcam && (
+              <WebcamCard 
+                key={`webcam-${selectedWebcamIndex}-${refreshKey}`} 
+                webcam={selectedWebcam} 
+                onViewChange={setCurrentViewUrl} 
+              />
+            )}
           </div>
 
           {/* Windguru Forecast Overview */}
@@ -121,7 +158,22 @@ export default function Home() {
                 <h2 className="text-xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">Windguru Forecast</h2>
               </div>
               <div className="p-2 bg-white">
-                <WindguruWidget />
+                {/* Add key prop to force re-render when station ID changes */}
+                <WindguruWidget 
+                  key={`windguru-${currentViewUrl}-${selectedWebcamIndex}`}
+                  stationId={
+                    // For Sisikon, use station 57010
+                    selectedWebcam?.name.includes("Sisikon") 
+                      ? "57010" 
+                      // For Oberaegeri/Ägeri, use station 147758
+                      : selectedWebcam?.name.includes("Oberaegeri") 
+                        ? "147758"
+                        // For Flüelen webcams
+                        : (selectedWebcam?.name.includes("Flüelen") && 
+                           !(selectedWebcam?.name.includes("Windsurfing Urnersee") && 
+                             currentViewUrl.toLowerCase().includes("isleten"))) 
+                            ? "303067" : "988948"
+                  } />
               </div>
             </div>
           </div>
@@ -244,64 +296,69 @@ const webcams: Webcam[] = [
   },
 ]
 
-// Windguru Widget Component
-function WindguruWidget() {
-  // This component will only run on the client side
-  useEffect(() => {
+// Windguru Widget Component using their official widget
+function WindguruWidget({ stationId = "988948" }: { stationId?: string }) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  
+  React.useEffect(() => {
+    if (!containerRef.current) return;
+    
+    // Clear the container first
+    containerRef.current.innerHTML = '';
+    
+    // Remove any existing windguru scripts
+    const oldScripts = document.querySelectorAll('script[src*="windguru.cz/js/widget.php"]');
+    oldScripts.forEach(script => script.remove());
+    
     // Create a unique ID for this instance
-    const widgetId = "wg_fwdg_988948_100_" + Date.now();
+    const widgetId = `wg_fwdg_${stationId}_100_${Date.now()}`;
     
-    // Create container div
-    const container = document.createElement('div');
-    container.id = widgetId;
-    document.getElementById('windguru-container')?.appendChild(container);
+    // Create the widget container
+    const widgetContainer = document.createElement('div');
+    widgetContainer.id = widgetId;
+    containerRef.current.appendChild(widgetContainer);
     
-    // Load the Windguru script
-    const loadWindguruWidget = () => {
-      const arg = [
-        "s=988948",
-        "m=100",
-        "uid=" + widgetId,
-        "ai=0",
-        "wj=knots",
-        "tj=c",
-        "waj=m",
-        "tij=cm",
-        "odh=0",
-        "doh=24",
-        "fhours=240",
-        "hrsm=2",
-        "vt=forecasts",
-        "lng=en",
-        "idbs=1",
-        "p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING"
-      ];
-      
-      const script = document.createElement("script");
-      script.src = "https://www.windguru.cz/js/widget.php?" + (arg.join("&"));
-      document.body.appendChild(script);
-    };
+    // Create and load the Windguru script
+    const script = document.createElement('script');
+    const params = [
+      `s=${stationId}`,
+      'm=100',
+      `uid=${widgetId}`,
+      'ai=0',
+      'wj=knots',
+      'tj=c',
+      'waj=m',
+      'tij=cm',
+      'odh=0',
+      'doh=24',
+      'fhours=240',
+      'hrsm=2',
+      'vt=forecasts',
+      'lng=en',
+      'idbs=1',
+      'p=WINDSPD,GUST,SMER,TMPE,FLHGT,CDC,APCP1s,RATING'
+    ];
     
-    // Load the widget
-    loadWindguruWidget();
+    script.src = `https://www.windguru.cz/js/widget.php?${params.join('&')}`;
+    document.body.appendChild(script);
     
     // Cleanup function
     return () => {
-      const container = document.getElementById(widgetId);
-      if (container) {
-        container.remove();
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
       }
+      script.remove();
     };
-  }, []);
+  }, [stationId]); // Re-run when stationId changes
   
   return (
-    <div className="windguru-wrapper">
-      <div id="windguru-container" className="w-full overflow-x-auto"></div>
+    <div className="windguru-wrapper w-full overflow-x-auto bg-white p-2">
+      <div ref={containerRef} className="windguru-container"></div>
     </div>
   );
 }
 
-function WebcamCard({ webcam }: { webcam: Webcam }) {
+function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (viewUrl: string) => void }) {
   const [currentView, setCurrentView] = React.useState<string>(webcam.image);
   const [viewsExpanded, setViewsExpanded] = React.useState(false);
   const isSisikon = webcam.name.includes("Sisikon");
@@ -321,6 +378,10 @@ function WebcamCard({ webcam }: { webcam: Webcam }) {
   const handleViewChange = (viewUrl: string) => {
     setCurrentView(viewUrl);
     setRefreshTimestamp(Date.now());
+    // Notify parent component if callback provided
+    if (onViewChange) {
+      onViewChange(viewUrl);
+    }
     // On mobile, collapse the views panel after selection
     if (window.innerWidth < 768) {
       setViewsExpanded(false);
