@@ -212,11 +212,11 @@ const webcams: Webcam[] = [
   {
     name: "Oberaegeri",
     location: "Segel Club Aegeri",
-    image: "https://vcdn.bergfex.at/webcams/archive.new/downsized/4/23544/2025/04/10/23544_2025-04-10_1445_688d47e0ed941b8b.jpg",
+    image: "https://vcdn.bergfex.at/webcams/archive.new/downsized/4/23544/2025/05/10/23544_2025-05-10_1130_688d47e0ed941b8b.jpg",
     views: [
       {
         name: "Main View",
-        image: "https://vcdn.bergfex.at/webcams/archive.new/downsized/4/23544/2025/04/10/23544_2025-04-10_1445_688d47e0ed941b8b.jpg",
+        image: "https://vcdn.bergfex.at/webcams/archive.new/downsized/4/23544/2025/05/10/23544_2025-05-10_1130_688d47e0ed941b8b.jpg",
       },
     ],
   },
