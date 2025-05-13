@@ -32,6 +32,10 @@ const config = {
     ],
     unoptimized: true,
   },
+  // Add environment variables at build time
+  env: {
+    NEXT_PUBLIC_VERCEL_DEPLOYMENT_DATE: new Date().toISOString(),
+  },
 };
 
 export default config;

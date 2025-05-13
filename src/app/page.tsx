@@ -213,6 +213,11 @@ export default function Home() {
                 Send Feedback
               </a>
             </p>
+            {process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_DATE && (
+              <p className="mt-2 text-xs opacity-50">
+                Last updated: {new Date(process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_DATE).toLocaleString()} 
+              </p>
+            )}
           </div>
         </div>
       </footer>
