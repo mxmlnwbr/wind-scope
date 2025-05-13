@@ -10,7 +10,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ? process.env.NEXT_PUBLIC_APP_URL : "https://wind-scope.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://wind-scope.vercel.app"),
   title: "WindScope",
   description: "Live webcam feeds and wind information",
   icons: [{ rel: "icon", url: "/wind-scope.ico" }],
