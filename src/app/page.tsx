@@ -297,7 +297,9 @@ const webcams: Webcam[] = [
 ]
 
 // Windguru Widget Component using their official widget
-function WindguruWidget({ stationId = "988948" }: { stationId?: string }) {
+function WindguruWidget({ stationId }: { stationId?: string }) {
+  // Use nullish coalescing instead of default parameter to satisfy ESLint
+  const finalStationId = stationId ?? "988948";
   const containerRef = React.useRef<HTMLDivElement>(null);
   
   React.useEffect(() => {
@@ -311,7 +313,7 @@ function WindguruWidget({ stationId = "988948" }: { stationId?: string }) {
     oldScripts.forEach(script => script.remove());
     
     // Create a unique ID for this instance
-    const widgetId = `wg_fwdg_${stationId}_100_${Date.now()}`;
+    const widgetId = `wg_fwdg_${finalStationId}_100_${Date.now()}`;
     
     // Create the widget container
     const widgetContainer = document.createElement('div');
@@ -321,7 +323,7 @@ function WindguruWidget({ stationId = "988948" }: { stationId?: string }) {
     // Create and load the Windguru script
     const script = document.createElement('script');
     const params = [
-      `s=${stationId}`,
+      `s=${finalStationId}`,
       'm=100',
       `uid=${widgetId}`,
       'ai=0',
@@ -349,7 +351,7 @@ function WindguruWidget({ stationId = "988948" }: { stationId?: string }) {
       }
       script.remove();
     };
-  }, [stationId]); // Re-run when stationId changes
+  }, [finalStationId]); // Re-run when finalStationId changes
   
   return (
     <div className="windguru-wrapper w-full overflow-x-auto bg-white p-2">
