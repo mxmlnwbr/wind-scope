@@ -1,16 +1,21 @@
 import "~/styles/globals.css";
 
-import { type Metadata } from "next";
+import { type Metadata, type Viewport } from "next";
 import { Geist } from "next/font/google";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0ea5e9" // A blue color that matches water theme
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://wind-scope.vercel.app"),
   title: "WindScope",
   description: "Live webcam feeds and wind information",
   icons: [{ rel: "icon", url: "/wind-scope.ico" }],
   keywords: ["windsurfing", "webcams", "wind conditions", "water sports", "live feeds"],
   authors: [{ name: "WindScope Team" }],
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#0ea5e9", // A blue color that matches water theme
   openGraph: {
     title: "WindScope",
     description: "Live webcam feeds and wind information for windsurfing locations",
