@@ -215,7 +215,7 @@ export default function Home() {
             </p>
             {process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_DATE && (
               <p className="mt-2 text-xs opacity-50">
-                Last updated: {new Date(process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_DATE).toLocaleString()} 
+                Last Webpage update: {new Date(process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_DATE).toLocaleString()} 
               </p>
             )}
           </div>
@@ -370,13 +370,15 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
   const [viewsExpanded, setViewsExpanded] = React.useState(false);
   const isSisikon = webcam.name.includes("Sisikon");
   const isWindsurfingUrnersee = webcam.name.includes("Windsurfing Urnersee");
+  const isIsleten = webcam.name.includes("Isleten");
   const [refreshTimestamp, setRefreshTimestamp] = React.useState(Date.now());
 
   // Function to add timestamp to URL to force refresh
   const getRefreshedUrl = (url: string) => {
-    // Only add timestamp for proxy URLs
-    if (url.startsWith('/api/proxy')) {
-      return `${url}&t=${Date.now()}`;
+    // Add timestamp for proxy URLs or Isleten webcam
+    if (url.startsWith('/api/proxy') || (isIsleten && url.includes('webcam_isleten.jpg'))) {
+      const separator = url.includes('?') ? '&' : '?';
+      return `${url}${separator}t=${Date.now()}`;
     }
     return url;
   };
@@ -430,10 +432,10 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
                 loading="lazy"
               />
             </a>
-          ) : isWindsurfingUrnersee ? (
+          ) : isWindsurfingUrnersee || isIsleten ? (
             <a href={currentView} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">
               <img
-                src={currentView}
+                src={isIsleten ? getRefreshedUrl(currentView) : currentView}
                 alt={`${webcam.name} webcam`}
                 className="cursor-pointer"
                 style={{ 
@@ -444,6 +446,7 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
                   objectPosition: 'top center'
                 }}
                 loading="lazy"
+                key={isIsleten ? refreshTimestamp : undefined}
               />
             </a>
           ) : (
@@ -509,6 +512,14 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
                             key={`thumb-mobile-${index}-${refreshTimestamp}`}
                             loading="lazy"
                           />
+                        ) : isIsleten ? (
+                          <img 
+                            src={getRefreshedUrl(view.image)} 
+                            alt={view.name}
+                            className="w-full h-full object-cover"
+                            key={`thumb-mobile-${index}-${refreshTimestamp}`}
+                            loading="lazy"
+                          />
                         ) : (
                           <img
                             src={view.image}
@@ -540,6 +551,15 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
                   >
                     <div className={`w-full h-32 bg-black rounded-lg shadow-md flex items-center justify-center ${currentView === view.image ? 'ring-2 ring-sky-400 shadow-sky-400/30' : ''}`}>
                       {isSisikon ? (
+                        <img 
+                          src={getRefreshedUrl(view.image)} 
+                          alt={view.name}
+                          className={`w-full h-auto object-contain transition-all duration-200 ${currentView === view.image ? '' : 'opacity-80 hover:opacity-100'}`}
+                          key={`thumb-${index}-${refreshTimestamp}`}
+                          style={{ width: '100%' }}
+                          loading="lazy"
+                        />
+                      ) : isIsleten ? (
                         <img 
                           src={getRefreshedUrl(view.image)} 
                           alt={view.name}
