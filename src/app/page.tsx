@@ -372,6 +372,15 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
   const isWindsurfingUrnersee = webcam.name.includes("Windsurfing Urnersee");
   const isIsleten = webcam.name.includes("Isleten");
   const [refreshTimestamp, setRefreshTimestamp] = React.useState(Date.now());
+  
+  // Format current date for outdated message
+  const formattedDate = new Date().toLocaleDateString('de-CH', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 
   // Function to add timestamp to URL to force refresh
   const getRefreshedUrl = (url: string) => {
@@ -420,7 +429,7 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
   return (
     <Card className="overflow-hidden bg-slate-900/40 border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl">
       <div className="relative">
-        <div className="w-full bg-black rounded-t-lg flex items-center justify-center" style={{ minHeight: '400px', maxHeight: '90vh', padding: '0' }}>
+        <div className="w-full bg-black rounded-t-lg flex items-center justify-center relative" style={{ minHeight: '400px', maxHeight: '90vh', padding: '0' }}>
           {isSisikon ? (
             <a href={currentView} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">
               <img 
@@ -433,7 +442,7 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
               />
             </a>
           ) : isWindsurfingUrnersee || isIsleten ? (
-            <a href={currentView} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">
+            <a href={currentView} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center relative">
               <img
                 src={isIsleten ? getRefreshedUrl(currentView) : currentView}
                 alt={`${webcam.name} webcam`}
@@ -448,6 +457,16 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
                 loading="lazy"
                 key={isIsleten ? refreshTimestamp : undefined}
               />
+              {isWindsurfingUrnersee && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm z-10 pointer-events-none">
+                  <div className="bg-red-600/80 text-white px-6 py-3 rounded-lg text-center shadow-lg transform rotate-[-5deg] mb-4">
+                    <p className="text-2xl font-bold">OUTDATED WEBCAM</p>
+                  </div>
+                  <div className="bg-slate-800/80 text-white px-4 py-2 rounded-md text-center max-w-md">
+                    <p className="text-sm">This webcam feed is not current. Last checked: {formattedDate}</p>
+                  </div>
+                </div>
+              )}
             </a>
           ) : (
             <a href={currentView} target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">
