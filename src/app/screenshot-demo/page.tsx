@@ -52,7 +52,7 @@ export default function ScreenshotDemo() {
               </CardHeader>
               <CardContent>
                 <p className="text-sky-100">
-                  This card has ID "target-card" and will be captured using a selector.
+                  This card has ID &quot;target-card&quot; and will be captured using a selector.
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   <div className="p-2 bg-sky-950/50 rounded border border-sky-700/30">

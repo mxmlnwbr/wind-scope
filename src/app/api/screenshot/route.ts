@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
       const cookieDialogVisible = await page.evaluate(() => {
         const elements = Array.from(document.querySelectorAll('*'));
         return elements.some(el => {
-          const text = el.textContent?.toLowerCase() || '';
+          const text = el.textContent?.toLowerCase() ?? '';
           return text.includes('cookie') && window.getComputedStyle(el).display !== 'none';
         });
       });
@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
           const buttons = Array.from(document.querySelectorAll('button, [role="button"], a'));
           
           for (const btn of buttons) {
-            const text = btn.textContent?.trim() || '';
+            const text = btn.textContent?.trim() ?? '';
             if (closeTexts.includes(text)) {
               // TypeScript safety in evaluate context
               if (btn instanceof HTMLElement) {
@@ -121,7 +121,7 @@ export async function GET(request: NextRequest) {
       await page.evaluate(() => {
         // Find the cookie dialog
         const cookieElements = Array.from(document.querySelectorAll('*')).filter(el => {
-          const text = el.textContent?.toLowerCase() || '';
+          const text = el.textContent?.toLowerCase() ?? '';
           return text.includes('cookie') && window.getComputedStyle(el).display !== 'none';
         });
         
@@ -129,8 +129,8 @@ export async function GET(request: NextRequest) {
           // Find any close button within or near the cookie element
           const cookieElement = cookieElements[0];
           if (cookieElement) {
-            const closeButton = cookieElement.querySelector('.close') || 
-                               cookieElement.querySelector('[class*="close"]') ||
+            const closeButton = cookieElement.querySelector('.close') ?? 
+                               cookieElement.querySelector('[class*="close"]') ??
                                (cookieElement.parentElement ? cookieElement.parentElement.querySelector('.close') : null);
             
             if (closeButton instanceof HTMLElement) {

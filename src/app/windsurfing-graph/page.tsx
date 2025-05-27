@@ -47,7 +47,7 @@ export default function WindsurfingGraphPage() {
             <li>Return the image data to your browser</li>
           </ol>
           <p className="mt-3 text-sky-200">
-            This method is reliable because it runs on the server and isn't subject to 
+            This method is reliable because it runs on the server and isn&apos;t subject to 
             cross-origin restrictions that would prevent client-side capturing.
           </p>
         </div>
@@ -63,7 +63,7 @@ export default function WindsurfingGraphPage() {
             </li>
             <li>
               <strong>Data Freshness:</strong> The captured screenshot represents the graph 
-              at the moment of capture. For real-time data, you'll need to refresh.
+              at the moment of capture. For real-time data, you&apos;ll need to refresh.
             </li>
             <li>
               <strong>Server Resources:</strong> The server-side method uses more server resources 

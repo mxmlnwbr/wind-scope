@@ -33,8 +33,8 @@ export const ServerSideScreenshot: React.FC<ServerSideScreenshotProps> = ({
       const response = await fetch(apiUrl);
       
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Server returned ${response.status}`);
+        const errorData = await response.json() as { error?: string };
+        throw new Error(errorData.error ?? `Server returned ${response.status}`);
       }
       
       // Create a blob URL from the response
@@ -53,7 +53,7 @@ export const ServerSideScreenshot: React.FC<ServerSideScreenshotProps> = ({
 
   const refreshScreenshot = () => {
     setTimestamp(Date.now());
-    captureScreenshot();
+    void captureScreenshot();
   };
 
   const downloadScreenshot = () => {
@@ -137,7 +137,7 @@ export const ServerSideScreenshot: React.FC<ServerSideScreenshotProps> = ({
         
         {!isLoading && !screenshotUrl && !error && (
           <div className="empty-placeholder h-64 flex items-center justify-center bg-slate-900/60 border border-sky-700/30 rounded-md">
-            <p className="text-sky-400/60">Click "Capture Screenshot" to get started</p>
+            <p className="text-sky-400/60">Click &quot;Capture Screenshot&quot; to get started</p>
           </div>
         )}
         
