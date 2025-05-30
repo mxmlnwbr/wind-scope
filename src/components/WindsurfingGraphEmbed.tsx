@@ -7,6 +7,26 @@ interface WindsurfingGraphEmbedProps {
 }
 
 export function WindsurfingGraphEmbed({ className = '' }: WindsurfingGraphEmbedProps) {
+  // State to track if the device is mobile
+  const [isMobile, setIsMobile] = React.useState(false);
+  
+  // Effect to detect screen size and update state
+  React.useEffect(() => {
+    // Function to check if device is mobile based on screen width
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768); // Common breakpoint for mobile devices
+    };
+    
+    // Initial check
+    checkIfMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIfMobile);
+    
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+  
   return (
     <div className={className}>
       <div className="relative w-full aspect-[3/1] min-h-[300px] border border-sky-700/30 rounded-md overflow-hidden">
@@ -16,7 +36,7 @@ export function WindsurfingGraphEmbed({ className = '' }: WindsurfingGraphEmbedP
           style={{
             // Position the iframe to show just the graph area
             position: 'absolute',
-            top: '-325px', // Increased negative value to scroll down further
+            top: isMobile ? '-325px' : '-350px', // Different values for mobile and desktop
             left: '0',
             width: '100%',
             height: '1000px', // Increased height to ensure we capture the full graph
