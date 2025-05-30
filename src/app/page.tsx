@@ -193,6 +193,26 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Föhn diagram */}
+          <div className="mt-2 mb-8 mx-auto max-w-5xl">
+            <div className="bg-slate-900/40 border border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl overflow-hidden">
+              <div className="p-4 border-b border-sky-700/30">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">Föhn Wind Diagram</h2>
+              </div>
+              <div className="flex justify-center bg-black p-2">
+                <a href="https://profiwetter.ch/wind_foehn_ch_de.png?t=1699802646" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://profiwetter.ch/wind_foehn_ch_de.png?t=1699802646" 
+                    alt="Föhn Wind Diagram" 
+                    className="max-w-full h-auto cursor-pointer"
+                    style={{ maxHeight: '400px' }}
+                    loading="lazy"
+                  />
+                </a>
+              </div>
+            </div>
+          </div>
+
           {/* Windguru Forecast Overview */}
           <div className="mt-2 mb-8 mx-auto max-w-5xl">
             <div className="bg-slate-900/40 border border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl overflow-hidden">
@@ -216,26 +236,6 @@ export default function Home() {
                              currentViewUrl.toLowerCase().includes("isleten"))) 
                             ? "303067" : "988948"
                   } />
-              </div>
-            </div>
-          </div>
-          
-          {/* Föhn diagram */}
-          <div className="mt-2 mb-8 mx-auto max-w-5xl">
-            <div className="bg-slate-900/40 border border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl overflow-hidden">
-              <div className="p-4 border-b border-sky-700/30">
-                <h2 className="text-xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">Föhn Wind Diagram</h2>
-              </div>
-              <div className="flex justify-center bg-black p-2">
-                <a href="https://profiwetter.ch/wind_foehn_ch_de.png?t=1699802646" target="_blank" rel="noopener noreferrer">
-                  <img 
-                    src="https://profiwetter.ch/wind_foehn_ch_de.png?t=1699802646" 
-                    alt="Föhn Wind Diagram" 
-                    className="max-w-full h-auto cursor-pointer"
-                    style={{ maxHeight: '400px' }}
-                    loading="lazy"
-                  />
-                </a>
               </div>
             </div>
           </div>
