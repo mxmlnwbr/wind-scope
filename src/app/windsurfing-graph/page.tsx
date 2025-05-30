@@ -62,7 +62,7 @@ export default function WindsurfingGraphPage() {
             </li>
             <li>
               <strong>Cross-Origin Considerations:</strong> Some websites may use X-Frame-Options headers
-              to prevent their content from being embedded in iframes. If the graph doesn't appear,
+              to prevent their content from being embedded in iframes. If the graph does not appear,
               this might be the reason.
             </li>
           </ul>
