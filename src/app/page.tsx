@@ -68,15 +68,7 @@ export default function Home() {
           
           {/* Utility links */}
           <div className="hidden md:flex items-center gap-4">
-            <a 
-              href="/windsurfing-graph" 
-              className="px-3 py-1.5 text-sm font-medium rounded-md bg-sky-700/40 hover:bg-sky-600/50 text-sky-300 hover:text-white transition-colors border border-sky-700/50"
-            >
-              <span className="flex items-center gap-1">
-                <Camera className="h-4 w-4" />
-                Graph Screenshot
-              </span>
-            </a>
+            {/* Navigation links can be added here in the future */}
           </div>
           
           {/* Mobile burger menu button */}
@@ -116,17 +108,7 @@ export default function Home() {
                 
                 {/* Utility links in mobile menu */}
                 <div className="mt-3 pt-3 border-t border-sky-700/30">
-                  <a 
-                    href="/windsurfing-graph" 
-                    className="px-4 py-3 rounded-lg text-left text-sm font-medium transition-all duration-200 flex items-center text-sky-300/80 hover:bg-slate-800/50 hover:text-white"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Camera className="h-4 w-4 mr-2" />
-                    <div className="flex flex-col">
-                      <span>Graph Screenshot</span>
-                      <span className="text-xs text-sky-300/60">Capture windsurfing graph</span>
-                    </div>
-                  </a>
+                  {/* Mobile navigation links can be added here in the future */}
                 </div>
               </div>
             </div>
