@@ -16,10 +16,10 @@ export function WindsurfingGraphEmbed({ className = '' }: WindsurfingGraphEmbedP
           style={{
             // Position the iframe to show just the graph area
             position: 'absolute',
-            top: '-200px', // Adjust these values as needed to focus on the graph
+            top: '-350px', // Increased negative value to scroll down further
             left: '0',
             width: '100%',
-            height: '800px', // Make it tall enough to include the graph
+            height: '1000px', // Increased height to ensure we capture the full graph
             border: 'none',
             transform: 'scale(1.0)', // Adjust scale if needed
           }}
