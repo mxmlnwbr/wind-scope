@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
     });
     
     // Return the screenshot as an image
-    return new NextResponse(screenshot, {
+    return new NextResponse(screenshot as Buffer, {
       headers: {
         'Content-Type': 'image/png',
         'Cache-Control': 'public, max-age=300',

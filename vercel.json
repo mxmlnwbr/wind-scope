@@ -4,6 +4,5 @@
       "memory": 3008,
       "maxDuration": 60
     }
-  },
-  "buildCommand": "pnpm exec puppeteer browsers install chrome && pnpm build"
+  }
 }
