@@ -23,6 +23,7 @@ export function WindsurfingGraphEmbed({ className = '' }: WindsurfingGraphEmbedP
             border: 'none',
             transform: 'scale(1.0)', // Adjust scale if needed
           }}
+          scrolling="no"
           title="Windsurfing Urnersee Weather Graph"
           loading="lazy"
         />
