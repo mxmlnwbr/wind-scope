@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
+import { getBrowser } from '../../../lib/puppeteer';
 
 export async function GET(request: NextRequest) {
   const url = request.nextUrl.searchParams.get('url');
@@ -22,12 +22,8 @@ export async function GET(request: NextRequest) {
   let browser;
   
   try {
-    // Launch a headless browser with the installed Chrome
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH // Will use the installed Chrome browser
-    });
+    // Launch a headless browser using our helper function
+    browser = await getBrowser();
     
     const page = await browser.newPage();
     
@@ -76,7 +72,7 @@ export async function GET(request: NextRequest) {
       
       // Try each selector
       for (const cookieSelector of cookieSelectors) {
-        const hasButtons = await page.$$eval(cookieSelector, (buttons) => buttons.length > 0);
+        const hasButtons = await page.$$eval(cookieSelector, (buttons: Element[]) => buttons.length > 0);
         if (hasButtons) {
           // Click the first matching button
           await page.click(cookieSelector);
@@ -188,8 +184,16 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error capturing screenshot:', error);
     
+    // More detailed error message for debugging
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : '';
+    
     return NextResponse.json(
-      { error: `Failed to capture screenshot: ${error instanceof Error ? error.message : 'Unknown error'}` },
+      { 
+        error: `Failed to capture screenshot: ${errorMessage}`,
+        stack: errorStack,
+        details: 'This error may occur if Chrome is not available in the serverless environment'
+      },
       { status: 500 }
     );
   } finally {
