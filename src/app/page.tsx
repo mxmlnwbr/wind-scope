@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { Wind, Menu, Camera } from "lucide-react"
 import React, { useEffect } from "react"
+import { WindsurfingGraphEmbed } from "~/components/WindsurfingGraphEmbed"
 
 export default function Home() {
   // State to track the selected webcam
@@ -177,6 +178,19 @@ export default function Home() {
                 onViewChange={setCurrentViewUrl} 
               />
             )}
+          </div>
+
+                    
+          {/* Windsurfing Urnersee Weather Graph */}
+          <div className="mt-2 mb-8 mx-auto max-w-5xl">
+            <div className="bg-slate-900/40 border border-sky-700/30 backdrop-blur-sm shadow-xl rounded-xl overflow-hidden">
+              <div className="p-4 border-b border-sky-700/30">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-sky-300 to-blue-400 text-transparent bg-clip-text">Windsurfing Urnersee Weather Graph</h2>
+              </div>
+              <div className="p-4">
+                <WindsurfingGraphEmbed />
+              </div>
+            </div>
           </div>
 
           {/* Windguru Forecast Overview */}
