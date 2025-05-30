@@ -43,98 +43,29 @@ export async function GET(request: NextRequest) {
     // Wait for the selector to be visible
     await page.waitForSelector(selector, { timeout: 10000 });
     
-    // Check if cookie popup exists and close it
+    // Try to handle cookie popups, but don't worry if it fails
     try {
-      // Look for common cookie popup elements and close buttons
+      // Common cookie consent buttons
       const cookieSelectors = [
-        // Standard buttons
-        '.cc-dismiss', // Common cookie consent dismiss button
-        '.cc-close',   // Common cookie consent close button
-        '#accept-cookies',
-        '#cookie-accept',
-        // Text-based selectors (using page.$$eval instead of :contains which isn't standard)
-        'button',
-        '.cookie button',
-        '.cookie-banner button',
-        '.cookie-notice button',
-        '#cookie-consent button',
-        '.cookie-consent button',
-        '.cookie-popup button',
-        '.cookie-dialog button',
-        '[role="dialog"] button',
-        // Close buttons
-        '.close-button',
-        '.cookie-close',
-        'button.close',
-        '[data-dismiss="cookie"]',
-        '[aria-label="Close"]',
+        '.cc-dismiss', '.cc-close', '#accept-cookies', '#cookie-accept',
+        '.cookie button', '.cookie-banner button', '.cookie-notice button'
       ];
       
       // Try each selector
-      for (const cookieSelector of cookieSelectors) {
-        const hasButtons = await page.$$eval(cookieSelector, (buttons: Element[]) => buttons.length > 0);
-        if (hasButtons) {
-          // Click the first matching button
-          await page.click(cookieSelector);
-          console.log(`Clicked cookie button with selector: ${cookieSelector}`);
-          // Wait a moment for any animations to complete
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          break;
+      for (const selector of cookieSelectors) {
+        try {
+          const exists = await page.$(selector) !== null;
+          if (exists) {
+            await page.click(selector);
+            console.log(`Clicked cookie button with selector: ${selector}`);
+            // Wait for animations to complete
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            break;
+          }
+        } catch (e) {
+          // Ignore errors for individual selectors
         }
       }
-      
-      // If we still see a dialog with 'Cookie' text, try to click any visible X or close button
-      const cookieDialogVisible = await page.evaluate(() => {
-        const elements = Array.from(document.querySelectorAll('*'));
-        return elements.some(el => {
-          const text = el.textContent?.toLowerCase() ?? '';
-          return text.includes('cookie') && window.getComputedStyle(el).display !== 'none';
-        });
-      });
-      
-      if (cookieDialogVisible) {
-        // Try to find and click on an X symbol or close button
-        await page.evaluate(() => {
-          // Find buttons with X text
-          const closeTexts = ['×', 'X', '✕', '✖', 'Close', 'Schließen'];
-          const buttons = Array.from(document.querySelectorAll('button, [role="button"], a'));
-          
-          for (const btn of buttons) {
-            const text = btn.textContent?.trim() ?? '';
-            if (closeTexts.includes(text)) {
-              // TypeScript safety in evaluate context
-              if (btn instanceof HTMLElement) {
-                btn.click();
-                return true;
-              }
-            }
-          }
-          return false;
-        });
-      }
-      
-      // Additional attempt: try to click on the specific X button from the screenshot
-      await page.evaluate(() => {
-        // Find the cookie dialog
-        const cookieElements = Array.from(document.querySelectorAll('*')).filter(el => {
-          const text = el.textContent?.toLowerCase() ?? '';
-          return text.includes('cookie') && window.getComputedStyle(el).display !== 'none';
-        });
-        
-        if (cookieElements.length > 0) {
-          // Find any close button within or near the cookie element
-          const cookieElement = cookieElements[0];
-          if (cookieElement) {
-            const closeButton = cookieElement.querySelector('.close') ?? 
-                               cookieElement.querySelector('[class*="close"]') ??
-                               (cookieElement.parentElement ? cookieElement.parentElement.querySelector('.close') : null);
-            
-            if (closeButton instanceof HTMLElement) {
-              closeButton.click();
-            }
-          }
-        }
-      });
     } catch (error) {
       console.warn('Error handling cookie popup:', error);
       // Continue even if we couldn't close the popup
