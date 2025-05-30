@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBrowser } from '../../../lib/puppeteer';
+import type { Page } from 'playwright';
 
 export async function GET(request: NextRequest) {
   const url = request.nextUrl.searchParams.get('url');
@@ -25,18 +26,17 @@ export async function GET(request: NextRequest) {
     // Launch a headless browser using our helper function
     browser = await getBrowser();
     
-    const page = await browser.newPage();
-    
-    // Set a higher viewport size for better resolution
-    await page.setViewport({
-      width: 1920,
-      height: 1080,
-      deviceScaleFactor: 2, // Higher resolution
+    // Create a new context and page
+    const context = await browser.newContext({
+      viewport: { width: 1920, height: 1080 },
+      deviceScaleFactor: 2 // Higher resolution
     });
+    
+    const page = await context.newPage();
 
     // Navigate to the URL
     await page.goto(url, {
-      waitUntil: 'networkidle2',
+      waitUntil: 'networkidle',
       timeout: 30000
     });
     
@@ -45,27 +45,7 @@ export async function GET(request: NextRequest) {
     
     // Try to handle cookie popups, but don't worry if it fails
     try {
-      // Common cookie consent buttons
-      const cookieSelectors = [
-        '.cc-dismiss', '.cc-close', '#accept-cookies', '#cookie-accept',
-        '.cookie button', '.cookie-banner button', '.cookie-notice button'
-      ];
-      
-      // Try each selector
-      for (const selector of cookieSelectors) {
-        try {
-          const exists = await page.$(selector) !== null;
-          if (exists) {
-            await page.click(selector);
-            console.log(`Clicked cookie button with selector: ${selector}`);
-            // Wait for animations to complete
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            break;
-          }
-        } catch (e) {
-          // Ignore errors for individual selectors
-        }
-      }
+      await handleCookiePopups(page);
     } catch (error) {
       console.warn('Error handling cookie popup:', error);
       // Continue even if we couldn't close the popup
@@ -91,7 +71,7 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Add padding to ensure we capture the full element (especially the bottom)
+    // Add padding to ensure we capture the full element
     const padding = 20; // Add 20px padding all around
     
     // Take screenshot with padding to ensure we get the full graph
@@ -106,7 +86,7 @@ export async function GET(request: NextRequest) {
     });
     
     // Return the screenshot as an image
-    return new NextResponse(screenshot as Buffer, {
+    return new NextResponse(screenshot, {
       headers: {
         'Content-Type': 'image/png',
         'Cache-Control': 'public, max-age=300',
@@ -130,6 +110,31 @@ export async function GET(request: NextRequest) {
   } finally {
     if (browser) {
       await browser.close();
+    }
+  }
+}
+
+// Helper function to handle cookie popups
+async function handleCookiePopups(page: Page) {
+  // Common cookie consent buttons
+  const cookieSelectors = [
+    '.cc-dismiss', '.cc-close', '#accept-cookies', '#cookie-accept',
+    '.cookie button', '.cookie-banner button', '.cookie-notice button'
+  ];
+  
+  // Try each selector
+  for (const cookieSelector of cookieSelectors) {
+    try {
+      const button = await page.$(cookieSelector);
+      if (button) {
+        await button.click();
+        console.log(`Clicked cookie button with selector: ${cookieSelector}`);
+        // Wait for animations to complete
+        await page.waitForTimeout(1000);
+        break;
+      }
+    } catch (e) {
+      // Ignore errors for individual selectors
     }
   }
 }
