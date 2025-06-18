@@ -491,7 +491,7 @@ function WebcamCard({ webcam, onViewChange }: { webcam: Webcam, onViewChange?: (
                     <p className="text-2xl font-bold">OUTDATED WEBCAM</p>
                   </div>
                   <div className="bg-slate-800/80 text-white px-4 py-2 rounded-md text-center max-w-md">
-                    <p className="text-sm">This webcam feed is not current. Last checked: {formattedDate}</p>
+                    <p className="text-sm">This webcam feed is not current. Last checked: {new Date(process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_DATE).toLocaleString()}</p>
                   </div>
                 </div>
               )}
